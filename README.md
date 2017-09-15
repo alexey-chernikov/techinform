@@ -10,7 +10,10 @@ Install gem yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Available commands:
+
+    $ techinform help [COMMAND]                      # Describe available commands or one specific command
+    $ techinform restore [type] [filename] [dbname]  # Restore database from backup
 
 ## Development
 
