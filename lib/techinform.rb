@@ -1,4 +1,5 @@
 require 'techinform/version'
+require 'techinform/projects'
 require 'thor'
 
 module Techinform
@@ -13,5 +14,13 @@ module Techinform
         `tar -xOf #{filename} | gunzip | pv | mysql -uroot #{dbname}`
       end
     end
+
+    desc 'deploy [project]', 'Deploy specific project'
+    def deploy(project)
+      `cd ~/projects/#{project} && git pull origin master && bundle install && cap production deploy`
+    end
+
+    desc 'projects', 'Projects'
+    subcommand :projects, Techinform::Projects
   end
 end
