@@ -8,7 +8,7 @@ module Techinform
     def restore(type, filename, dbname)
       if type == 'pg'
         puts "Restoring postgres backup to database #{dbname}..."
-        `tar -xOf #{filename} | gunzip | pv | psql $3 > /dev/null`
+        `tar -xOf #{filename} | gunzip | pv | psql #{dbname} > /dev/null`
       else
         puts "Restoring mysql backup to database #{dbname}..."
         `tar -xOf #{filename} | gunzip | pv | mysql -uroot #{dbname}`
