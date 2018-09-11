@@ -11,6 +11,6 @@ class PostgreBackup < DbBackup
   end
 
   def db_list
-    @dbs ||= `#{"PGPASSWORD=#{password}" if password} psql #{"--host=#{host}" if host} #{"--username=#{user}" if user} -t -c 'SELECT datname FROM pg_database WHERE datistemplate = false;'`.split.compact
+    @dbs ||= (`#{"PGPASSWORD=#{password}" if password} psql #{"--host=#{host}" if host} #{"--username=#{user}" if user} -t -c 'SELECT datname FROM pg_database WHERE datistemplate = false;'`.split.compact - ['root'])
   end
 end
