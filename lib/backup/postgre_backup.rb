@@ -2,7 +2,7 @@ require_relative 'db_backup'
 
 class PostgreBackup < DbBackup
   def run
-    puts "Run postgre backup on #{database}..."
+    puts "Run postgre backup on #{database} to #{filepath}..."
     command = "#{"PGPASSWORD=#{password}" if password} pg_dump --clean --if-exists --no-owner #{"--host=#{host}" if host} #{"--username=#{user}" if user} #{database}"
     command += " | bzip2" if compress?
     command += " > #{filepath}"
