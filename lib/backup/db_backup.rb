@@ -1,8 +1,6 @@
 require_relative 'backup'
 
 class DbBackup < Backup
-  DATE_FORMAT = '%Y-%m-%d-%H-%M'
-
   attr_reader :password, :user, :database, :host
 
   def initialize user:, database: nil, password: nil, compress: true, host: nil
@@ -24,10 +22,6 @@ class DbBackup < Backup
 
   def ensure_path
     `mkdir -p #{path}`
-  end
-
-  def get_datetime_from_filename filename
-    DateTime.strptime(filename.split('-')[2], DATE_FORMAT)
   end
 
   def clean_files

@@ -1,7 +1,7 @@
 require 'date'
 
 class Backup
-  DATE_FORMAT = '%Y-%d-%m-%H-%M'
+  DATE_FORMAT = '%Y-%m-%d-%H-%M'
 
   def initialize compress: true
     @compress = compress
@@ -16,8 +16,16 @@ class Backup
     self.class.to_s.gsub('Backup', '').downcase
   end
 
+  def filename
+    "#{backup_type}-#{DateTime.now.strftime(DATE_FORMAT)}.#{compress? ? 'tar.bz2' : 'tar' }"
+  end
+
   def path
-    "/backups/"
+    "/backups/#{backup_type}"
+  end
+
+  def filepath
+    "#{path}/#{filename}"
   end
 
   def ensure_path

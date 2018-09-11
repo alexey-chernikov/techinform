@@ -31,5 +31,11 @@ module Techinform
       puts "Available postgres databases: #{dbs.join(', ')}"
       dbs
     end
+
+    desc 'etc', 'Backup of /etc folder'
+    def etc
+      require_relative '../../lib/backup/etc_backup'
+      EtcBackup.new.run
+    end
   end
 end
