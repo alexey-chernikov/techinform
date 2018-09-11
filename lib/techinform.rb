@@ -1,5 +1,6 @@
 require 'techinform/version'
 require 'techinform/projects'
+require 'techinform/backup'
 require 'thor'
 
 module Techinform
@@ -22,5 +23,10 @@ module Techinform
 
     desc 'projects', 'Projects'
     subcommand :projects, Techinform::Projects
+    desc 'backup', 'Backup'
+    subcommand :backup, Techinform::BackupCommand
   end
 end
+
+#MysqlBackup.new(user: 'root', database: 'lakor').run
+#PostgreBackup.new(user: 'alex', database: 'carmen').run
