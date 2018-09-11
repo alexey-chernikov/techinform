@@ -1,13 +1,13 @@
 require_relative 'backup'
 
 class DbBackup < Backup
-  DATE_FORMAT = '%Y-%d-%m-%H-%M'
+  DATE_FORMAT = '%Y-%m-%d-%H-%M'
 
   attr_reader :password, :user, :database, :host
 
-  def initialize user:, database:, password: nil, compress: true, host: nil
+  def initialize user:, database: nil, password: nil, compress: true, host: nil
     @password, @user, @database, @compress, @host = password, user, database, compress, host
-    ensure_path
+    ensure_path unless database.nil?
   end
 
   def filename

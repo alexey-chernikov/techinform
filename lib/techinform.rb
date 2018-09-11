@@ -1,6 +1,6 @@
 require 'techinform/version'
 require 'techinform/projects'
-require 'techinform/backup'
+require_relative 'techinform/backup'
 require 'thor'
 
 module Techinform

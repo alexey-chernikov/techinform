@@ -6,16 +6,30 @@ module Techinform
   class BackupCommand < Thor
     desc 'mysql [dbname | dbname1,dbname2,... | all] ', 'Backup mysql database/databases, or all databases in separate files'
     def mysql(dbnames)
-      dbnames.split(',').each do |db|
+      (dbnames == 'all' ? mysql_list : dbnames.split(',')).each do |db|
         MysqlBackup.new(user: ENV['USER'], database: db, password: ENV['PASSWORD']).run
       end
     end
 
+    desc 'pg_list', 'List of postgres databases'
+    def mysql_list
+      dbs = MysqlBackup.new(user: ENV['USER'], password: ENV['PASSWORD']).db_list
+      puts "Available mysql databases: #{dbs.join(', ')}"
+      dbs
+    end
+
     desc 'pg [dbname | dbname1,dbname2,... | all]', 'Backup postgres database/databases or all databases in separate files'
     def pg(dbnames)
-      dbnames.split(',').each do |db|
+      (dbnames == 'all' ? pg_list : dbnames.split(',')).each do |db|
         PostgreBackup.new(user: ENV['USER'], database: db, password: ENV['PASSWORD']).run
       end
+    end
+
+    desc 'pg_list', 'List of postgres databases'
+    def pg_list
+      dbs = PostgreBackup.new(user: ENV['USER'], password: ENV['PASSWORD']).db_list
+      puts "Available postgres databases: #{dbs.join(', ')}"
+      dbs
     end
   end
 end

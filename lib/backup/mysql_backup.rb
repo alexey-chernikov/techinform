@@ -2,20 +2,12 @@ require_relative 'db_backup'
 
 class MysqlBackup < DbBackup
   def run
-    if database != 'all'
-      dbs = [database]
-    else
-      dbs = db_list
-      puts "Available mysql databases: #{dbs.join(', ')}"
-    end
-    dbs.each do |database|
-      puts "Run mysql backup on #{database}..."
-      command = "mysqldump -C #{"--password=#{password}" if password} #{"-h #{host}" if host} #{"--user=#{user}" if user} #{database}"
-      command += " | bzip2" if compress?
-      command += " > #{filepath}"
-      output = `#{command}`
-      puts output unless output.empty?
-    end
+    puts "Run mysql backup on #{database}..."
+    command = "mysqldump -C #{"--password=#{password}" if password} #{"-h #{host}" if host} #{"--user=#{user}" if user} #{database}"
+    command += " | bzip2" if compress?
+    command += " > #{filepath}"
+    output = `#{command}`
+    puts output unless output.empty?
   end
 
   def db_list
