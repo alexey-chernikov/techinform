@@ -45,7 +45,7 @@ class Backup
       datetime = get_datetime_from_filename(file)
       day_id = datetime.strftime('%Y-%m-%d')
       month_id = datetime.strftime('%Y-%m')
-      if datetime < (DateTime.now << 2)     # 1 month ago
+      if datetime < (DateTime.now << 2)     # 2 month ago
         if datetime.day == 1 && !(months_taken.include? month_id)
           result[file] = false
           months_taken << month_id
@@ -59,9 +59,10 @@ class Backup
         else
           result[file] = true
         end
-      elsif days_taken.includ
       end
     end
+
+    puts "Candidates to removal: #{result.select{|file, delete| delete }.keys.inspect}"
   end
 end
 
