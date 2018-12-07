@@ -8,6 +8,14 @@ Install gem yourself as:
 
     $ gem install techinform
     
+## Requirements
+
+    apt install gpg2 pv mysqldump bzip2
+    
+* mysqldump - for mysql database dumps
+* gpg2 - backup encryption support
+* bzip2 - backup compression support
+    
 ## Configuration
 
 All configuration is done via environment variables
