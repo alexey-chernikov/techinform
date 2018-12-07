@@ -44,7 +44,7 @@ module Techinform
     def sync(server, type, ipaddr)
       location = Techinform.backups_syncing_location(server, type)
       `mkdir -p #{location}`
-      system("rsync -avz #{"--exclude-from=#{File.absolute_path('sync/rails_exclude_files')}" if type == 'rails'} backup@#{ipaddr}::#{type} #{location}")
+      system("rsync -avz #{"--exclude-from=#{"#{File.dirname(__FILE__)}/sync/rails_exclude_files"}" if type == 'rails'} backup@#{ipaddr}::#{type} #{location}")
     end
   end
 end
