@@ -7,6 +7,15 @@ Collection of console tools, useful for everyday tasks in Techinform company.
 Install gem yourself as:
 
     $ gem install techinform
+    
+## Configuration
+
+All configuration is done via environment variables
+
+Available variables:
+
+    DEBUG=true                      # Print debug information on commands run
+    GPGKEY=< email | key id >       # Enables encryption and encrypt with specific public key via gpg2. gpg2 should be installed
 
 ## Usage
 
