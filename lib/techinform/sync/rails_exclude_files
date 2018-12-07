@@ -1,0 +1,5 @@
+db/sphinx
+tmp/
+shared/bundle
+shared/log
+deploy/*/repo

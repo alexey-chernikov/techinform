@@ -1,6 +1,8 @@
 require 'thor'
 require_relative '../../lib/backup/mysql_backup'
 require_relative '../../lib/backup/postgre_backup'
+require_relative 'defaults'
+require 'tempfile'
 
 module Techinform
   class BackupCommand < Thor
@@ -36,6 +38,13 @@ module Techinform
     def etc
       require_relative '../../lib/backup/etc_backup'
       EtcBackup.new.run
+    end
+
+    desc 'sync [server] [type] [ipaddr | dnsname]', 'Sync backups from remote server'
+    def sync(server, type, ipaddr)
+      location = Techinform.backups_syncing_location(server, type)
+      `mkdir -p #{location}`
+      system('rsync', "-avz #{"--exclude-from=#{File.absolute_path('sync/rails_exclude_files')}" if type == 'rails'} backup@#{ipaddr}::#{type} #{location}")
     end
   end
 end
