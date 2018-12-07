@@ -41,7 +41,7 @@ module Techinform
     private
 
     def encrypt?
-      ENV['GPGKEY'].present?
+      !ENV['GPGKEY'].nil?
     end
   end
 end
