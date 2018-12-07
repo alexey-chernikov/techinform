@@ -3,8 +3,10 @@ require_relative 'backup'
 class DbBackup < Backup
   attr_reader :password, :user, :database, :host
 
-  def initialize user:, database: nil, password: nil, compress: true, host: nil, encrypt: true
+  def initialize user: nil, database: nil, password: nil, compress: true, host: nil, encrypt: nil
     super compress: compress, encrypt: encrypt
+    user = ENV['USER'] if user.nil?
+    password = ENV['PASSWORD'] if user.nil?
     @password, @user, @database, @host = password, user, database, host
     ensure_path unless database.nil?
   end

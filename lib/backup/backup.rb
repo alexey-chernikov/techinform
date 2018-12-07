@@ -3,9 +3,9 @@ require 'date'
 class Backup
   DATE_FORMAT = '%Y-%m-%d-%H-%M'
 
-  def initialize compress: true, encrypt: true
+  def initialize compress: true, encrypt: nil
     @compress = compress
-    @encrypt = encrypt
+    @encrypt = encrypt.nil? ? !ENV['GPGKEY'].nil? : encrypt
     raise "GPGKEY environment variable should be specified for encryption" if encrypt? && ENV['GPGKEY'].nil?
     ensure_path
   end
