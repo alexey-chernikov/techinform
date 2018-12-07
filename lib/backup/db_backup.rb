@@ -3,13 +3,14 @@ require_relative 'backup'
 class DbBackup < Backup
   attr_reader :password, :user, :database, :host
 
-  def initialize user:, database: nil, password: nil, compress: true, host: nil
-    @password, @user, @database, @compress, @host = password, user, database, compress, host
+  def initialize user:, database: nil, password: nil, compress: true, host: nil, encrypt: true
+    super compress: compress, encrypt: encrypt
+    @password, @user, @database, @host = password, user, database, host
     ensure_path unless database.nil?
   end
 
   def filename
-    "#{backup_type}-#{database}-#{DateTime.now.strftime(DATE_FORMAT)}.#{compress? ? 'sql.bz2' : 'sql' }"
+    "#{backup_type}-#{database}-#{DateTime.now.strftime(DATE_FORMAT)}.#{filename_extension('sql')}"
   end
 
   def path

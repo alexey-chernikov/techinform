@@ -3,8 +3,10 @@ require 'date'
 class Backup
   DATE_FORMAT = '%Y-%m-%d-%H-%M'
 
-  def initialize compress: true
+  def initialize compress: true, encrypt: true
     @compress = compress
+    @encrypt = encrypt
+    raise "GPGKEY environment variable should be specified for encryption" if encrypt? && ENV['GPGKEY'].nil?
     ensure_path
   end
 
@@ -12,12 +14,49 @@ class Backup
     @compress
   end
 
+  def encrypt?
+    @encrypt
+  end
+
+  def debug?
+    ENV['DEBUG'] == 'true'
+  end
+
   def backup_type
     self.class.to_s.gsub('Backup', '').downcase
   end
 
   def filename
-    "#{backup_type}-#{DateTime.now.strftime(DATE_FORMAT)}.#{compress? ? 'tar.bz2' : 'tar' }"
+    "#{backup_type}-#{DateTime.now.strftime(DATE_FORMAT)}.#{filename_extension}"
+  end
+
+  def filename_extension(base = 'tar')
+    if encrypt?
+      "#{base}.gpg"
+    else
+      if compress?
+        "#{base}.bz2"
+      else
+        base
+      end
+    end
+  end
+
+  # Main pipe, which generates data for backup
+  def backup_command
+    "echo Just text to backup"
+  end
+
+  def encrypt_compress_pipe_command
+    if encrypt?
+      "| gpg2 --encrypt #{"--compress-algo=bzip2" if compress?} --recipient=#{ENV['GPGKEY']}"
+    else
+      "| bzip2" if compress?
+    end
+  end
+
+  def output_command
+    "> #{filepath}"
   end
 
   def path
@@ -35,6 +74,19 @@ class Backup
   def get_datetime_from_filename filename
     DateTime.strptime(filename.split('-')[2], DATE_FORMAT)
   end
+
+  def print_info
+    puts "Run backup to #{filepath}..."
+  end
+
+  def run
+    print_info
+    command = "#{backup_command} #{encrypt_compress_pipe_command} #{output_command}"
+    puts "Command: #{command}" if debug?
+    output = `#{command}`
+    puts output unless output.empty?
+  end
+
 
   def clean_files
     result = {} # true - delete file, false - do not delete
