@@ -2,6 +2,9 @@
 
 Collection of console tools, useful for everyday tasks in Techinform company.
 
+* All backups stored at /backups/local directory.
+* All backup sync goes to /backups/< server name > directory.
+
 ## Installation
 
 Install gem yourself as:

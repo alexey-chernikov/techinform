@@ -16,7 +16,7 @@ class DbBackup < Backup
   end
 
   def path
-    "/backups/#{backup_type}/#{database}"
+    "#{Techinform::BACKUPS_LOCAL_PREFIX}/#{backup_type}/#{database}"
   end
 
   def filepath

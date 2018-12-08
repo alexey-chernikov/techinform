@@ -1,4 +1,5 @@
 require 'date'
+require_relative '../techinform/defaults'
 
 class Backup
   DATE_FORMAT = '%Y-%m-%d-%H-%M'
@@ -60,7 +61,7 @@ class Backup
   end
 
   def path
-    "/backups/#{backup_type}"
+    "#{Techinform::BACKUPS_LOCAL_PREFIX}/#{backup_type}"
   end
 
   def filepath
