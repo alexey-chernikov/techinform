@@ -17,14 +17,14 @@ module Techinform
       if type == 'pg'
         puts "Restoring postgres backup to database #{dbname}..."
         if encrypted
-          `gpg2 --decrypt < #{filename} | pv --wait | psql #{dbname} > /dev/null`
+          `gpg2 --decrypt #{filename} | pv --wait | psql #{dbname} > /dev/null`
         else
           `tar -xOf #{filename} | bunzip2 | pv | psql #{dbname} > /dev/null`
         end
       else
         puts "Restoring mysql backup to database #{dbname}..."
         if encrypted
-          `gpg2 --decrypt < #{filename} | pv --wait | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
+          `gpg2 --decrypt #{filename} | pv --wait | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         else
           `tar -xOf #{filename} | bunzip2 | pv | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         end
