@@ -10,8 +10,8 @@ module Techinform
       require 'highline'
       if !File.exist?(filename)
         cli = HighLine.new
-        path = type == 'pg' ? PostgreBackup.new(database: filename).path : MysqlBackup.new(database: filename)
-        filename = "#{path}/#{cli.choose(*Dir.entries(path) - %w[. ..])}"
+        path = type == 'pg' ? PostgreBackup.new(database: filename).path : MysqlBackup.new(database: filename).path
+        filename = "#{path}/#{cli.choose(*Dir.entries(path).sort - %w[. ..])}"
       end
       encrypted = filename.split('.').last == 'gpg'
       if type == 'pg'
