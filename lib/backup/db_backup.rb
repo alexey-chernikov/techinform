@@ -19,6 +19,10 @@ class DbBackup < Backup
     "#{Techinform::BACKUPS_LOCAL_PREFIX}/#{backup_type}/#{database}"
   end
 
+  def restore_path
+    "#{Techinform::BACKUPS_ALL_PREFIX}/backups/#{backup_type}/#{database}"
+  end
+
   def filepath
     "#{path}/#{filename}"
   end
