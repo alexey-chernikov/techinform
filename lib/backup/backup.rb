@@ -103,7 +103,6 @@ class Backup
 
   def clean_files(prefix = 'local', dry_run = true)
     puts(dry_run ? 'Performing dry run' : '!!!! Cleaning backups !!!!')
-    result = {} # true - delete file, false - do not delete
     months_taken = []
     days_taken = []
     # Process each backup type
@@ -113,6 +112,7 @@ class Backup
       Dir["#{type}/*"].each do |name|
         puts "Name: #{name}"
         # Get all files
+        result = {} # true - delete file, false - do not delete
         Dir["#{name}/*"].sort.each do |file|
           datetime = get_datetime_from_filename(file)
           day_id = datetime.strftime('%Y-%m-%d')
