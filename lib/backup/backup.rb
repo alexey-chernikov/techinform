@@ -73,7 +73,8 @@ class Backup
   end
 
   def get_datetime_from_filename filename
-    DateTime.strptime(filename.split('-')[2], DATE_FORMAT)
+    puts 'Filename: ' + filename.split('.').first.split('-')[2..6].join('-')
+    DateTime.strptime(filename.split('.').first.split('-')[2..6].join('-'), DATE_FORMAT)
   end
 
   def print_info
@@ -88,34 +89,63 @@ class Backup
     puts output unless output.empty?
   end
 
+  # Change it in child class
+  def minimum_backup_size
+    50
+  end
 
-  def clean_files
+  # It worth to redefine that method to better check backup integrity
+  # Return true if everything ok
+  def verify_backup
+    File.size(filepath) > minimum_backup_size
+  end
+
+  def clean_files(prefix = 'local', dry_run = true)
+    puts(dry_run ? 'Performing dry run' : '!!!! Cleaning backups !!!!')
     result = {} # true - delete file, false - do not delete
     months_taken = []
     days_taken = []
-    files = Dir.entries(path) - ['.', '..']
-    files.each do |file|
-      datetime = get_datetime_from_filename(file)
-      day_id = datetime.strftime('%Y-%m-%d')
-      month_id = datetime.strftime('%Y-%m')
-      if datetime < (DateTime.now << 2)     # 2 month ago
-        if datetime.day == 1 && !(months_taken.include? month_id)
-          result[file] = false
-          months_taken << month_id
-        else
-          result[file] = true
+    # Process each backup type
+    Dir["#{Techinform::BACKUPS_PREFIX}/#{prefix}/*"].each do |type|
+      puts "Type: #{type}"
+      # Get all backup name
+      Dir["#{type}/*"].each do |name|
+        puts "Name: #{name}"
+        # Get all files
+        Dir["#{name}/*"].sort.each do |file|
+          datetime = get_datetime_from_filename(file)
+          day_id = datetime.strftime('%Y-%m-%d')
+          month_id = datetime.strftime('%Y-%m')
+          if datetime < (DateTime.now << 2)     # 2 month ago
+            if datetime.day == 1 && !(months_taken.include? month_id)
+              result[file] = false
+              months_taken << month_id
+            else
+              result[file] = true
+            end
+          elsif datetime < DateTime.now - 14 # 2 weeks ago
+            if [1, 7, 14, 21].include?(datetime.day) && !(days_taken.include?(day_id))
+              result[file] = false
+              days_taken << day_id
+            else
+              result[file] = true
+            end
+          end
         end
-      elsif datetime < DateTime.now - 14 # 2 weeks ago
-        if [1, 7, 14, 21].include?(datetime.day) && !(days_taken.include?(day_id))
-          result[file] = false
-          days_taken << day_id
+        if dry_run
+          result.each do |file, delete|
+            puts "#{file} #{"*" if delete}"
+          end
         else
-          result[file] = true
+          # Actually delete files
+          result.select{|file, delete| delete}.keys.each do |file|
+            puts `rm #{file}`
+          end
         end
+        return
       end
     end
 
-    puts "Candidates to removal: #{result.select{|file, delete| delete }.keys.inspect}"
   end
 end
 
