@@ -41,7 +41,7 @@ module Techinform
     desc 'backup', 'Backup'
     subcommand :backup, Techinform::BackupCommand
     desc "clean [prefix]", 'Clean old backup files (default prefix: local)'
-    option :delete
+    option :delete, type: :boolean, desc: 'Actually delete files'
     def clean(prefix = 'local')
       puts Backup.new.clean_files(prefix, !options[:delete])
     end

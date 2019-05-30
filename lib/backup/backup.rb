@@ -1,5 +1,6 @@
 require 'date'
 require_relative '../techinform/defaults'
+require 'highline'
 
 class Backup
   DATE_FORMAT = '%Y-%m-%d-%H-%M'
@@ -132,17 +133,16 @@ class Backup
             end
           end
         end
-        if dry_run
-          result.each do |file, delete|
-            puts "#{file} #{"*" if delete}"
-          end
-        else
+        result.each do |file, delete|
+          puts "#{file} #{"*" if delete}"
+        end
+        unless dry_run
+          return unless HighLine.new.agree "Delete #{result.select{|file, delete| delete}.keys.size} files - Are you sure? (yes/no)"
           # Actually delete files
           result.select{|file, delete| delete}.keys.each do |file|
             puts `rm #{file}`
           end
         end
-        return
       end
     end
 
