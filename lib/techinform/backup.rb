@@ -34,6 +34,12 @@ module Techinform
       dbs
     end
 
+    desc 'files', 'Files backup'
+    def files(files_backup='/etc')
+      require_relative '../../lib/backup/files_backup'
+      FilesBackup.new(files_backup).run
+    end
+
     desc 'etc', 'Backup of /etc folder'
     def etc
       require_relative '../../lib/backup/etc_backup'

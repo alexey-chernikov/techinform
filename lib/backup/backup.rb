@@ -28,8 +28,12 @@ class Backup
     self.class.to_s.gsub('Backup', '').downcase
   end
 
+  def backup_type_filename
+    backup_type
+  end
+
   def filename
-    "#{backup_type}-#{DateTime.now.strftime(DATE_FORMAT)}.#{filename_extension}"
+    "#{backup_type_filename}-#{DateTime.now.strftime(DATE_FORMAT)}.#{filename_extension}"
   end
 
   def filename_extension(base = 'tar')
