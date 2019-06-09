@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rm *.gem && gem build techinform.gemspec && gem install techinform-*.gem
