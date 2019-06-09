@@ -3,8 +3,9 @@ require_relative 'backup'
 class FilesBackup < Backup
   attr_reader :files_backup
 
-  def initialize files_backup = '/etc'
+  def initialize files_backup = '/etc', compress = true, encrypt = false
     @files_backup = files_backup
+    super compress: compress, encrypt: encrypt
   end
 
   def print_info
