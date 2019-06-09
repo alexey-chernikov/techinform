@@ -34,7 +34,7 @@ module Techinform
       dbs
     end
 
-    desc 'file [path]', 'Files backup'
+    desc 'files [path]', 'Files backup'
     def files(files_backup='/etc')
       require_relative '../../lib/backup/files_backup'
       FilesBackup.new(files_backup).run
