@@ -12,7 +12,6 @@ class BackupFilesTest < Minitest::Test
   end
 
   def test_filepath
-    assert_match /\/backups\/local\/files\/etc/, FilesBackup.new('/etc').filepath
+    assert_match /\/backups\/local\/files\/etc\/etc-/, FilesBackup.new('/etc').filepath
   end
-
 end

@@ -42,8 +42,8 @@ module Techinform
 
     desc 'etc', 'Backup of /etc folder'
     def etc
-      require_relative '../../lib/backup/etc_backup'
-      EtcBackup.new.run
+      require_relative '../../lib/backup/files_backup'
+      FilesBackup.new('/etc').run
     end
 
     desc 'sync [server] [type] [ipaddr | dnsname]', 'Sync backups from remote server'

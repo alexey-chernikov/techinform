@@ -15,6 +15,10 @@ class FilesBackup < Backup
     files_backup.sub(/^\//, '').gsub('/', '_')
   end
 
+  def path
+    "#{Techinform::BACKUPS_LOCAL_PREFIX}/#{backup_type}/#{backup_type_filename}"
+  end
+
   def backup_command
     "tar -c #{files_backup}"
   end
