@@ -6,7 +6,7 @@ require 'thor'
 module Techinform
   class CLI < Thor
     desc 'restore [type] [absolute_filename or database to select file] [dbname]', 'Restore database from backup; if no absolute filename given, will present select menu to choose file'
-    def restore(type, filename, dbname)
+    def restore(type, filename, dbname, just_decrypt = false)
       require 'highline'
       if !File.exist?(filename)
         cli = HighLine.new
@@ -16,19 +16,28 @@ module Techinform
       encrypted = filename.split('.').last == 'gpg'
       if type == 'pg'
         puts "Restoring postgres backup to database #{dbname}..."
-        if encrypted
+        if encrypted && just_decrypt
+          `gpg2 --decrypt #{filename} | pv --wait > #{File.basename(filename, '.*')}`
+        elsif encrypted
           `gpg2 --decrypt #{filename} | pv --wait | psql #{dbname} > /dev/null`
         else
           `tar -xOf #{filename} | bunzip2 | pv | psql #{dbname} > /dev/null`
         end
       else
         puts "Restoring mysql backup to database #{dbname}..."
-        if encrypted
+        if encrypted && just_decrypt
+          `gpg2 --decrypt #{filename} | pv --wait > #{File.basename(filename, '.*')}`
+        elsif encrypted
           `gpg2 --decrypt #{filename} | pv --wait | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         else
           `tar -xOf #{filename} | bunzip2 | pv | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         end
       end
+    end
+
+    desc 'decrypt [type] [absolute_filename or database to select file]', 'Decrypt file from backup; if no absolute filename given, will present select menu to choose file'
+    def decrypt(type, filename)
+      restore(type, filename, nil, true)
     end
 
     desc 'deploy [project]', 'Deploy specific project'
