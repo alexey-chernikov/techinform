@@ -112,7 +112,7 @@ class Backup
       process_clean_files(prefix)
     else
       # Process each backup type
-      Dir["#{Techinform::BACKUPS_PREFIX}/#{prefix}/backups/*"].each do |type|
+      Dir["#{Techinform::BACKUPS_PREFIX}/#{prefix}/*"].each do |type|
         puts "Type: #{type}"
         # Get all backup name
         Dir["#{type}/*"].each do |path|
