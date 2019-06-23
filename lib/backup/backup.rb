@@ -80,7 +80,8 @@ class Backup
   end
 
   def get_datetime_from_filename filename
-    DateTime.strptime(filename.split('.').first.split('-')[2..6].join('-'), DATE_FORMAT)
+    puts '--- test ' + filename
+    DateTime.strptime(filename.split('.').first.split('-')[-5..-1].join('-'), DATE_FORMAT)
   end
 
   def print_info
@@ -112,7 +113,7 @@ class Backup
       process_clean_files(prefix)
     else
       # Process each backup type
-      Dir["#{Techinform::BACKUPS_PREFIX}/#{prefix}/*"].each do |type|
+      Dir["#{Techinform::BACKUPS_PREFIX}/#{prefix}/backups/*"].each do |type|
         puts "Type: #{type}"
         # Get all backup name
         Dir["#{type}/*"].each do |path|
