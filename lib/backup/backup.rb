@@ -3,13 +3,14 @@ require_relative '../techinform/defaults'
 require 'highline'
 
 class Backup
-  attr_reader :dry_run
+  attr_reader :dry_run, :quiet
   DATE_FORMAT = '%Y-%m-%d-%H-%M'
 
-  def initialize(compress: true, encrypt: nil, dry_run: true)
+  def initialize(compress: true, encrypt: nil, dry_run: true, quiet: false)
     @compress = compress
     @encrypt = encrypt.nil? ? !ENV['GPGKEY'].nil? : encrypt
     @dry_run = dry_run
+    @quiet = quiet
     raise "GPGKEY environment variable should be specified for encryption" if encrypt? && ENV['GPGKEY'].nil?
     ensure_path
   end
@@ -131,7 +132,7 @@ class Backup
     end
     show_statistics(mark_files)
     unless dry_run
-      return unless HighLine.new.agree "Delete #{mark_files.select{|file, delete| delete}.keys.size} files - Are you sure? (yes/no)"
+      return if !quiet && !HighLine.new.agree("Delete #{mark_files.select{|file, delete| delete}.keys.size} files - Are you sure? (yes/no)")
       # Actually delete files
       mark_files.select{|file, delete| delete}.keys.each do |file|
         result = `rm #{file}`
