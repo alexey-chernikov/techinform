@@ -134,7 +134,8 @@ class Backup
       return unless HighLine.new.agree "Delete #{mark_files.select{|file, delete| delete}.keys.size} files - Are you sure? (yes/no)"
       # Actually delete files
       mark_files.select{|file, delete| delete}.keys.each do |file|
-        puts `rm #{file}`
+        result = `rm #{file}`
+        puts result unless result.empty?
       end
     end
   end
