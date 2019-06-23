@@ -80,7 +80,6 @@ class Backup
   end
 
   def get_datetime_from_filename filename
-    puts '--- test ' + filename
     DateTime.strptime(filename.split('.').first.split('-')[-5..-1].join('-'), DATE_FORMAT)
   end
 
