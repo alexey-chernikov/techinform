@@ -17,7 +17,7 @@ module Techinform
       if type == 'pg'
         puts "Restoring postgres backup to database #{dbname}..."
         if encrypted && just_decrypt
-          `gpg2 --decrypt #{filename} | pv --wait > #{File.basename(filename, '.*')}`
+          `gpg2 --decrypt #{filename} | pv --wait | bzip2 > #{File.basename(filename, '.*')}`
         elsif encrypted
           `gpg2 --decrypt #{filename} | pv --wait | psql #{dbname} > /dev/null`
         else
@@ -26,7 +26,7 @@ module Techinform
       else
         puts "Restoring mysql backup to database #{dbname}..."
         if encrypted && just_decrypt
-          `gpg2 --decrypt #{filename} | pv --wait > #{File.basename(filename, '.*')}`
+          `gpg2 --decrypt #{filename} | pv --wait | bzip2 > #{File.basename(filename, '.*')}`
         elsif encrypted
           `gpg2 --decrypt #{filename} | pv --wait | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         else
