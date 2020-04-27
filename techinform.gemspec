@@ -7,11 +7,24 @@ Gem::Specification.new do |spec|
   spec.name          = 'techinform'
   spec.version       = Techinform::VERSION
   spec.authors       = ['Alexey Chernikov']
-  spec.email         = ['alexey.chernikov@gmail.com']
+  spec.email         = ['alexey@chernikov.online']
 
   spec.summary       = %q{Console tools, useful at Techinform}
-  spec.description   = %q{Collection of console tools, which is useful for everyday work at Techinform Soft.}
+  spec.description   = %q{Collection of console tools, which is useful for everyday work at Techinform Soft ( https://techinform.dev )}
   spec.homepage      = 'https://techinform.dev'
+
+  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
+  # to allow pushing to a single host or delete this section to allow pushing to any host.
+  if spec.respond_to?(:metadata)
+    spec.metadata["allowed_push_host"] = "https://techinform.dev"
+
+    spec.metadata["homepage_uri"] = spec.homepage
+    spec.metadata["source_code_uri"] = "https://github.com/techinform-dev/techinform"
+    spec.metadata["changelog_uri"] = "https://github.com/techinform-dev/techinform/CHANGELOG.md"
+  else
+    raise "RubyGems 2.0 or newer is required to protect against " \
+      "public gem pushes."
+  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -26,6 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'highline', '~> 2.0'
 
   spec.add_development_dependency 'bundler', '~> 1.15'
-  spec.add_development_dependency 'rake', '>= 12.3.3'
+  spec.add_development_dependency 'rake', '~> 13.0.1'
   spec.add_development_dependency 'minitest', '~> 5.0'
 end
