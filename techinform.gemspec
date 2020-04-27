@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ['alexey.chernikov@gmail.com']
 
   spec.summary       = %q{Console tools, useful at Techinform}
-  spec.description   = %q{Collection of console tools, which is useful for everyday work at Techinform.}
-  spec.homepage      = 'https://techinform.pro'
+  spec.description   = %q{Collection of console tools, which is useful for everyday work at Techinform Soft.}
+  spec.homepage      = 'https://techinform.dev'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})

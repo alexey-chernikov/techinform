@@ -1,6 +1,6 @@
 # Techinform
 
-Collection of console tools, useful for everyday tasks in Techinform company.
+Collection of console tools, useful for everyday tasks in Techinform Soft company (https://techinform.dev).
 
 * All backups stored at /backups/local directory.
 * All backup sync goes to /backups/< server name > directory.

@@ -1,3 +1,3 @@
 module Techinform
-  VERSION = "1.4.6"
+  VERSION = "1.4.8"
 end
