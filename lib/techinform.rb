@@ -17,20 +17,20 @@ module Techinform
       if type == 'pg'
         puts "Restoring postgres backup to database #{dbname}..."
         if encrypted && just_decrypt
-          `gpg2 --decrypt #{filename} | pv --wait | bzip2 > #{File.basename(filename, '.*')}`
+          `pv --wait #{filename} | gpg2 --decrypt  | bzip2 > #{File.basename(filename, '.*')}`
         elsif encrypted
-          `gpg2 --decrypt #{filename} | pv --wait | psql #{dbname} > /dev/null`
+          `pv --wait #{filename} | gpg2 --decrypt | psql #{dbname} > /dev/null`
         else
-          `tar -xOf #{filename} | bunzip2 | pv | psql #{dbname} > /dev/null`
+          `pv --wait #{filename} | bunzip2 | psql #{dbname} > /dev/null`
         end
       else
         puts "Restoring mysql backup to database #{dbname}..."
         if encrypted && just_decrypt
-          `gpg2 --decrypt #{filename} | pv --wait | bzip2 > #{File.basename(filename, '.*')}`
+          `pv --wait #{filename} | gpg2 --decrypt | bzip2 > #{File.basename(filename, '.*')}`
         elsif encrypted
-          `gpg2 --decrypt #{filename} | pv --wait | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
+          `pv --wait #{filename} | gpg2 --decrypt | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         else
-          `tar -xOf #{filename} | bunzip2 | pv | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
+          `pv --wait #{filename} | bunzip2 | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         end
       end
     end
