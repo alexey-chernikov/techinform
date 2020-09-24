@@ -28,7 +28,7 @@ Available variables:
 
     DEBUG=true                      # Print debug information on commands run
     GPGKEY=< email | key id >       # Enables encryption and encrypt with specific public key via gpg2. gpg2 should be installed
-    USER=root                       # User for database access
+    DBUSER=root                       # User for database access
     PASSWORD=password               # Password for database access
 
 ## Usage
