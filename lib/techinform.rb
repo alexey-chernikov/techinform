@@ -33,7 +33,6 @@ module Techinform
           `pv --wait #{filename} | gpg2 --decrypt | #{bzip2} > #{File.basename(filename, '.*') + '.bz2'}`
         elsif encrypted
           puts "Restoring mysql backup to database #{dbname}..."
-          puts "pv --wait #{filename} | gpg2 --decrypt | mysql #{"-u#{ENV['DBUSER']}" if !ENV['DBUSER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}"
           `pv --wait #{filename} | gpg2 --decrypt | mysql #{"-u#{ENV['DBUSER']}" if !ENV['DBUSER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         else
           `pv --wait #{filename} | #{bunzip2} | mysql #{"-u#{ENV['DBUSER']}" if !ENV['DBUSER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
