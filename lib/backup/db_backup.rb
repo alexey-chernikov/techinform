@@ -5,7 +5,7 @@ class DbBackup < Backup
 
   def initialize user: nil, database: nil, password: nil, compress: true, host: nil, encrypt: nil
     super compress: compress, encrypt: encrypt
-    user = ENV['USER'] if user.nil?
+    user = ENV['DBUSER'] if user.nil?
     password = ENV['PASSWORD'] if password.nil?
     @password, @user, @database, @host = password, user, database, host
     ensure_path unless database.nil?
