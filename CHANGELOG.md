@@ -1,4 +1,8 @@
 
+### 1.5.1
+
+Use parallel version of bzip2 - lbzip2 - if installed
+
 ### 1.5.0
 
 Change progress display - now correctly shows percents
