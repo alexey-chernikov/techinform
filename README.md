@@ -17,7 +17,7 @@ Install gem yourself as:
     
 * mysqldump - for mysql database dumps
 * gpg2 - backup encryption support
-* bzip2 - backup compression support
+* bzip2 - backup compression support (prefer lbzip2 if installed)
 * rsync - syncing backups
     
 ## Configuration

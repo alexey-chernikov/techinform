@@ -1,6 +1,7 @@
 require 'date'
 require_relative '../techinform/defaults'
 require 'highline'
+require 'bzip2_selector'
 
 class Backup
   attr_reader :dry_run, :quiet
@@ -60,7 +61,7 @@ class Backup
     if encrypt?
       "| gpg2 --encrypt #{"--compress-algo=bzip2" if compress?} --recipient=#{ENV['GPGKEY']}"
     else
-      "| bzip2" if compress?
+      "| #{bzip2}" if compress?
     end
   end
 

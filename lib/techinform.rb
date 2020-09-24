@@ -2,12 +2,15 @@ require 'techinform/version'
 require 'techinform/projects'
 require_relative 'techinform/backup'
 require 'thor'
+require 'bzip2_selector'
+
 
 module Techinform
   class CLI < Thor
     desc 'restore [type] [absolute_filename or database to select file] [dbname]', 'Restore database from backup; if no absolute filename given, will present select menu to choose file'
-    def restore(type, filename, dbname, just_decrypt = false)
+    def restore(type, filename, dbname = nil, just_decrypt = false)
       require 'highline'
+      dbname = filename if dbname.nil?
       if !File.exist?(filename)
         cli = HighLine.new
         path = type == 'pg' ? PostgreBackup.new(database: filename).restore_path : MysqlBackup.new(database: filename).restore_path
@@ -15,28 +18,31 @@ module Techinform
       end
       encrypted = filename.split('.').last == 'gpg'
       if type == 'pg'
-        puts "Restoring postgres backup to database #{dbname}..."
         if encrypted && just_decrypt
-          `pv --wait #{filename} | gpg2 --decrypt  | bzip2 > #{File.basename(filename, '.*')}`
+          puts "Decrypting postgres backup of #{filename}..."
+          `pv --wait #{filename} | gpg2 --decrypt  | #{bzip2} > #{File.basename(filename, '.*') + '.bz2'}`
         elsif encrypted
+          puts "Restoring postgres backup to database #{dbname}..."
           `pv --wait #{filename} | gpg2 --decrypt | psql #{dbname} > /dev/null`
         else
-          `pv --wait #{filename} | bunzip2 | psql #{dbname} > /dev/null`
+          `pv --wait #{filename} | #{bunzip2} | psql #{dbname} > /dev/null`
         end
       else
-        puts "Restoring mysql backup to database #{dbname}..."
         if encrypted && just_decrypt
-          `pv --wait #{filename} | gpg2 --decrypt | bzip2 > #{File.basename(filename, '.*')}`
+          puts "Decrypting mysql backup of #{filename}..."
+          `pv --wait #{filename} | gpg2 --decrypt | #{bzip2} > #{File.basename(filename, '.*') + '.bz2'}`
         elsif encrypted
+          puts "Restoring mysql backup to database #{dbname}..."
           `pv --wait #{filename} | gpg2 --decrypt | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         else
-          `pv --wait #{filename} | bunzip2 | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
+          `pv --wait #{filename} | #{bunzip2} | mysql #{"-u#{ENV['USER']}" if !ENV['USER'].nil?} #{"-p#{ENV['PASSWORD']}" if !ENV['PASSWORD'].nil?} #{dbname}`
         end
       end
     end
 
     desc 'decrypt [type] [absolute_filename or database to select file]', 'Decrypt file from backup; if no absolute filename given, will present select menu to choose file'
     def decrypt(type, filename)
+      puts "lbzip2 is not found. Single-threaded bzip2 will be used. Consider installing lbzip2" if bzip2 == 'bzip2'
       restore(type, filename, nil, true)
     end
 
