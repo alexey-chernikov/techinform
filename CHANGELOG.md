@@ -1,3 +1,6 @@
+### 1.5.2
+
+- Version bump with minor text changes
 
 ### 1.5.1
 
