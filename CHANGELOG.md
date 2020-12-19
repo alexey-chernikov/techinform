@@ -1,3 +1,7 @@
+### 1.6.1
+
+- Do not sync releases folder in case of rails backup sync
+
 ### 1.6.0 
 
 - Adds --delete option on backup sync (via rsync)

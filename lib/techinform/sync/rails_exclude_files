@@ -3,3 +3,4 @@ tmp/
 shared/bundle
 shared/log
 deploy/*/repo
+releases/
