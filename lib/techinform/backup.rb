@@ -47,10 +47,11 @@ module Techinform
     end
 
     desc 'sync [server] [type] [ipaddr | dnsname]', 'Sync backups from remote server'
+    option :delete, type: :boolean, default: false, desc: 'Mirror files (delete nonexistent) on sync'
     def sync(server, type, ipaddr)
       location = Techinform.backups_syncing_location(server, type)
       `mkdir -p #{location}`
-      system("rsync -avz #{"--exclude-from=#{"#{File.dirname(__FILE__)}/sync/rails_exclude_files"}" if type == 'rails'} backup@#{ipaddr}::#{type} #{location}")
+      system("rsync -avz #{'--delete' if options[:delete]} #{"--exclude-from=#{"#{File.dirname(__FILE__)}/sync/rails_exclude_files"}" if type == 'rails'} backup@#{ipaddr}::#{type} #{location}")
     end
   end
 end

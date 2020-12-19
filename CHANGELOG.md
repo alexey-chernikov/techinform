@@ -1,3 +1,7 @@
+### 1.6.0 
+
+- Adds --delete option on backup sync (via rsync)
+
 ### 1.5.2
 
 - Version bump with minor text changes
