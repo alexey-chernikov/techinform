@@ -47,7 +47,7 @@ module Techinform
     end
 
     desc 'sync [server] [type] [ipaddr | dnsname]', 'Sync backups from remote server'
-    option :delete, type: :boolean, default: false, desc: 'Mirror files (delete nonexistent) on sync'
+    option :delete, type: :boolean, default: false, desc: 'Mirror files (delete non-existent) on sync'
     def sync(server, type, ipaddr)
       location = Techinform.backups_syncing_location(server, type)
       `mkdir -p #{location}`
